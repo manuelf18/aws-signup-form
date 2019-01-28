@@ -1,0 +1,258 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Metadata": {
+        "AWS::CloudFormation::Designer": {
+            "fef35747-14d8-41d6-b3d5-c5fdd8f7cdbd": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 270,
+                    "y": 60
+                },
+                "z": 1,
+                "embeds": [],
+                "dependson": [
+                    "b4f06d48-7e6e-42fb-a4fb-b0c893a900b4"
+                ]
+            },
+            "b4f06d48-7e6e-42fb-a4fb-b0c893a900b4": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 420,
+                    "y": 60
+                },
+                "z": 1,
+                "embeds": [],
+                "isassociatedwith": [
+                    "fef35747-14d8-41d6-b3d5-c5fdd8f7cdbd"
+                ]
+            },
+            "83abc666-7f64-4024-8b5f-e65ed065f457": {
+                "size": {
+                    "width": 90,
+                    "height": 90
+                },
+                "position": {
+                    "x": 60,
+                    "y": 90
+                },
+                "z": 1,
+                "embeds": []
+            },
+            "35e070e2-6ab8-4b16-92e1-dd9b31e92517": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 120,
+                    "y": 270
+                },
+                "z": 1,
+                "embeds": []
+            },
+            "f3fecff9-bf64-4a9e-bcf0-c1d8397ded4a": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": -40,
+                    "y": 240
+                },
+                "z": 0,
+                "embeds": [],
+                "iscontainedinside": [
+                    "83abc666-7f64-4024-8b5f-e65ed065f457"
+                ]
+            }
+        }
+    },
+    "Resources": {
+        "s3bucket": {
+            "Type": "AWS::S3::Bucket",
+            "Properties": {
+                "AccessControl": "PublicRead",
+                "BucketName": "s3bucketforbalboadevelopers",
+                "WebsiteConfiguration": {
+                    "IndexDocument": "index.html",
+                    "ErrorDocument": "error.html",
+                    "RoutingRules": [
+                        {
+                            "RoutingRuleCondition": {
+                                "HttpErrorCodeReturnedEquals": "404",
+                                "KeyPrefixEquals": "out1/"
+                            },
+                            "RedirectRule": {
+                                "HostName": "ec2-11-22-333-44.compute-1.amazonaws.com",
+                                "ReplaceKeyPrefixWith": "report-404/"
+                            }
+                        }
+                    ]
+                }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "fef35747-14d8-41d6-b3d5-c5fdd8f7cdbd"
+                }
+            }
+        },
+        "s3bucketpolicy": {
+            "Type": "AWS::S3::BucketPolicy",
+            "Properties": {
+                "Bucket": {
+                    "Ref": "s3bucket"
+                },
+                "PolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Sid": "AddPerm",
+                            "Effect": "Allow",
+                            "Principal": "*",
+                            "Action": "s3:GetObject",
+                            "Resource": {
+                                "Fn::Join": [
+                                    "",
+                                    [
+                                        "arn:aws:s3:::",
+                                        {
+                                            "Ref": "s3bucket"
+                                        },
+                                        "/*"
+                                    ]
+                                ]
+                            }
+                        }
+                    ]
+                }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "b4f06d48-7e6e-42fb-a4fb-b0c893a900b4"
+                }
+            }
+        },
+        "apigateway": {
+            "Type": "AWS::ApiGateway::RestApi",
+            "Properties": {
+                "Description": "API Gateway for Lambda",
+                "Name": "apigateway"
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "83abc666-7f64-4024-8b5f-e65ed065f457"
+                }
+            }
+        },
+        "lambda": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+                "Code": {
+                    "S3Bucket": "lambda-severless",
+                    "S3Key": "lambda.zip"
+                },
+                "Description": "Lambda function that consumes MailChimp, Github Airtable",
+                "FunctionName": "email-joining-lambdax",
+                "Handler": "index.handler",
+                "Role": "arn:aws:iam::471260279600:role/service-role/Admin",
+                "Runtime": "nodejs8.10"
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "35e070e2-6ab8-4b16-92e1-dd9b31e92517"
+                }
+            }
+        },
+        "apimethod": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+                "AuthorizationType": "NONE",
+                "HttpMethod": "POST",
+                "Integration": {
+                    "Type": "AWS",
+                    "IntegrationHttpMethod": "POST",
+                    "Uri": {
+                        "Fn::Join": [
+                            "",
+                            [
+                                "arn:aws:apigateway:",
+                                {
+                                    "Ref": "AWS::Region"
+                                },
+                                ":lambda:path/2015-03-31/functions/",
+                                {
+                                    "Fn::GetAtt": [
+                                        "lambda",
+                                        "Arn"
+                                    ]
+                                },
+                                "/invocations"
+                            ]
+                        ]
+                    },
+                    "IntegrationResponses": [
+                        {
+                            "StatusCode": 200
+                        }
+                    ]
+                },
+                "RequestParameters": {
+                    "method.request.querystring.name": false
+                },
+                "ResourceId": {
+                    "Fn::GetAtt": [
+                        "apigateway",
+                        "RootResourceId"
+                    ]
+                },
+                "RestApiId": {
+                    "Ref": "apigateway"
+                },
+                "MethodResponses": [
+                    {
+                        "StatusCode": 200
+                    }
+                ]
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "f3fecff9-bf64-4a9e-bcf0-c1d8397ded4a"
+                }
+            }
+        }
+    },
+    "Outputs": {
+        "WebsiteURL": {
+            "Value": {
+                "Fn::GetAtt": [
+                    "s3bucket",
+                    "WebsiteURL"
+                ]
+            },
+            "Description": "URL for website hosted on S3"
+        },
+        "S3BucketSecureURL": {
+            "Value": {
+                "Fn::Join": [
+                    "",
+                    [
+                        "https://",
+                        {
+                            "Fn::GetAtt": [
+                                "s3bucket",
+                                "DomainName"
+                            ]
+                        }
+                    ]
+                ]
+            },
+            "Description": "Name of S3 bucket to hold website content"
+        }
+    }
+}

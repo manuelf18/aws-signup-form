@@ -1,0 +1,1 @@
+aws cloudformation deploy --stack-name signupform --template-file template.json --capabilities CAPABILITY_IAM
