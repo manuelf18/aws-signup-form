@@ -11,8 +11,10 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "preupload": "npm run build",
+    "upload": "aws s3 sync build/ s3://${S3BUCKET}",
     "predeploy": "npm run build",
-    "deploy": "aws s3 sync build/ s3://${S3BUCKET}",
+    "deploy": "aws s3 sync build/ s3://${S3BUCKETDEPLOY}",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

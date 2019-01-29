@@ -10,7 +10,11 @@ This repository contains a form built with [Create React App](https://github.com
 * Unix like OS (Tested on Mac OS X).
 
 ## TODO:
-Generate a way to keep the uniques name for clashing. These names are defined in template.json, they are the 
+Generate a way to keep the uniques name for clashing. These names are defined in template.json, they are the names of the S3 bucket, lambda function and apigateway.
+At the end youll need the following enviromental variables:
+S3BUCKET
+S3BUCKETDEPLOY
+LAMBDAFUNCTION
 
 ## Install dependencies
 You can enter both folders and use:

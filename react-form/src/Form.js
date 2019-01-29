@@ -25,7 +25,6 @@ class CustomForm extends Component {
         const { username, fullname, email } = this.state,
               GITHUB_API_URL = 'https://api.github.com/users',
               AMAZON_GATEWAY_URL = process.env.REACT_APP_AWS_API_GATEWAY_KEY;
-        console.log(AMAZON_GATEWAY_URL);
         if( username ){
             try {
                 // Verify that the user exists

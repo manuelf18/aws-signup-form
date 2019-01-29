@@ -17,4 +17,4 @@ for output in data['Stacks'][0]['Outputs']:
 "`
 cd react-form
 REACT_APP_AWS_API_GATEWAY_KEY=$REACT_APP_AWS_API_GATEWAY_KEY | npm run deploy
-aws s3 sync build/ s3://s3bucketforbalboadevelopers
+npm run deploy
