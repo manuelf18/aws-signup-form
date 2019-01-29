@@ -1,8 +1,8 @@
-cd lambda\ function/
-bash publish_bucket.sh
+cd lambda-function/
+npm run deploy
 cd ..
-aws cloudformation deploy --stack-name signupform --template-file template.json --capabilities CAPABILITY_IAM
-aws cloudformation describe-stacks --stack-name signupform > output.txt
+aws cloudformation deploy --stack-name signupform2 --template-file template.json --capabilities CAPABILITY_IAM
+aws cloudformation describe-stacks --stack-name signupform2 > output.txt
 export REACT_APP_AWS_API_GATEWAY_KEY=`python3 -c "
 import json
 import os

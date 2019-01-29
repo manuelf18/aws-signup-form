@@ -89,7 +89,7 @@
             "Type": "AWS::S3::Bucket",
             "Properties": {
                 "AccessControl": "PublicRead",
-                "BucketName": "s3bucketforbalboadevelopers",
+                "BucketName": "BUCKETNAMEHERE",
                 "WebsiteConfiguration": {
                     "IndexDocument": "index.html",
                     "ErrorDocument": "error.html",
@@ -153,7 +153,7 @@
             "Type": "AWS::ApiGateway::RestApi",
             "Properties": {
                 "Description": "API Gateway for Lambda",
-                "Name": "apigateway"
+                "Name": "APIGATEWAYNAME"
             },
             "Metadata": {
                 "AWS::CloudFormation::Designer": {
@@ -169,7 +169,7 @@
                     "S3Key": "lambda.zip"
                 },
                 "Description": "Lambda function that consumes MailChimp, Github Airtable",
-                "FunctionName": "email-joining-lambdax",
+                "FunctionName": "LAMBDANAMEHERE",
                 "Handler": "index.handler",
                 "Role": "arn:aws:iam::471260279600:role/service-role/Admin",
                 "Runtime": "nodejs8.10"

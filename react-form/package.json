@@ -12,7 +12,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "predeploy": "npm run build",
-    "deploy": "aws s3 sync build/ s3://access-signup-form",
+    "deploy": "aws s3 sync build/ s3://${S3BUCKET}",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
