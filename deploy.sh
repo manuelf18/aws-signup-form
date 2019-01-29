@@ -1,3 +1,4 @@
+source .env.dev
 cd lambda-function/
 npm run deploy
 cd ..

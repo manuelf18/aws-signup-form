@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "preupload": " rm lambda.zip | zip -r lambda.zip *",
+    "preupload": "rm lambda.zip | zip -r lambda.zip *",
     "upload": "aws lambda update-function-code --function-name ${LAMBDAFUNCTIONAME} --zip-file fileb://lambda.zip",
     "predeploy": "npm run preupload",
     "deploy": "aws s3 sync . s3://lambda-severless --exclude '*' --include '*.zip'"

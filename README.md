@@ -11,10 +11,7 @@ This repository contains a form built with [Create React App](https://github.com
 
 ## TODO:
 Generate a way to keep the uniques name for clashing. These names are defined in template.json, they are the names of the S3 bucket, lambda function and apigateway.
-At the end youll need the following enviromental variables:
-S3BUCKET
-S3BUCKETDEPLOY
-LAMBDAFUNCTION
+You'll have to change the names in template.json
 
 ## Install dependencies
 You can enter both folders and use:
@@ -25,7 +22,6 @@ or use the shell utility in this repo:
 ```
 bash build.sh
 ```
-
 
 ## Testing the React form locally
 You can test the react form on your local machine by using either:

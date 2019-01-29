@@ -11,10 +11,10 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "preupload": "npm run build",
+    "preupload": "npm run build | source ../.env.local",
     "upload": "aws s3 sync build/ s3://${S3BUCKET}",
-    "predeploy": "npm run build",
-    "deploy": "aws s3 sync build/ s3://${S3BUCKETDEPLOY}",
+    "predeploy": "npm run build | source ../.env.dev",
+    "deploy": "aws s3 sync build/ s3://${S3BUCKET}",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
