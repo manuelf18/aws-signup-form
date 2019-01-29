@@ -70,6 +70,17 @@
                 "iscontainedinside": [
                     "83abc666-7f64-4024-8b5f-e65ed065f457"
                 ]
+            },
+            "3b01c77b-58eb-45f7-b067-60f5214053dd": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": -150,
+                    "y": 120
+                },
+                "z": 0
             }
         }
     },
@@ -225,6 +236,22 @@
                     "id": "f3fecff9-bf64-4a9e-bcf0-c1d8397ded4a"
                 }
             }
+        },
+        "apideploy": {
+            "DependsOn": "apimethod",
+            "Type": "AWS::ApiGateway::Deployment",
+            "Properties": {
+                "RestApiId": {
+                    "Ref": "apigateway"
+                },
+                "Description": "First Stage",
+                "StageName": "Stage0"
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "3b01c77b-58eb-45f7-b067-60f5214053dd"
+                }
+            }
         }
     },
     "Outputs": {
@@ -253,6 +280,24 @@
                 ]
             },
             "Description": "Name of S3 bucket to hold website content"
+        },
+        "InvokeUrl": {
+            "Value": {
+                "Fn::Join": [
+                    "",
+                    [
+                        "https://",
+                        {
+                            "Ref": "apigateway"
+                        },
+                        ".execute-api.",
+                        {
+                            "Ref": "AWS::Region"
+                        },
+                        ".amazonaws.com/Stage0"
+                    ]
+                ]
+            }
         }
     }
 }

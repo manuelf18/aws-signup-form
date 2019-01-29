@@ -1,0 +1,37 @@
+{
+    "Stacks": [
+        {
+            "StackId": "arn:aws:cloudformation:us-east-1:471260279600:stack/s4/d235d150-237c-11e9-94ae-0efda143af08",
+            "StackName": "s4",
+            "CreationTime": "2019-01-29T04:17:42.165Z",
+            "LastUpdatedTime": "2019-01-29T04:53:34.276Z",
+            "RollbackConfiguration": {
+                "RollbackTriggers": []
+            },
+            "StackStatus": "UPDATE_COMPLETE",
+            "DisableRollback": false,
+            "NotificationARNs": [],
+            "Outputs": [
+                {
+                    "OutputKey": "S3BucketSecureURL",
+                    "OutputValue": "https://s3bucketforbalboadevelopers.s3.amazonaws.com",
+                    "Description": "Name of S3 bucket to hold website content"
+                },
+                {
+                    "OutputKey": "InvokeUrl",
+                    "OutputValue": "https://y34zuz05jh.execute-api.us-east-1.amazonaws.com/Stage0"
+                },
+                {
+                    "OutputKey": "WebsiteURL",
+                    "OutputValue": "http://s3bucketforbalboadevelopers.s3-website-us-east-1.amazonaws.com",
+                    "Description": "URL for website hosted on S3"
+                }
+            ],
+            "Tags": [],
+            "EnableTerminationProtection": false,
+            "DriftInformation": {
+                "StackDriftStatus": "NOT_CHECKED"
+            }
+        }
+    ]
+}
