@@ -8,7 +8,7 @@ var base = Airtable.base('appOAKLyHFLsa7jpK');
 
 const GITHUB = {
     group: "BalboaDevelopers",
-    admin_token: "96348868b842ffaa1fa6044e4969c836c4516cf8",
+    admin_token: process.env.GITHUB_ADMIN_TOKEN,
     team_id: "3088701",
     repo: {
         owner: "BalboaDevelopers",
@@ -19,7 +19,7 @@ const GITHUB = {
 const MAILCHIMP = {
     dc: "us20", // this is the datacenter of the list
     list_id: "69cbc0fea0",
-    api_key: "f581cdfbc342622428b86e9bba65236a-us20"
+    api_key: process.env.MAILCHIMP_ADMIN_TOKEN
 }
 
 async function addGithub(username){
