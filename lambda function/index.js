@@ -2,7 +2,7 @@ const axios = require('axios');
 var Airtable = require('airtable');
 Airtable.configure({
     endpointUrl: 'https://api.airtable.com',
-    apiKey: 'keynZnVBcfVOPH6Xm'
+    apiKey: process.env.AIRTABLE_ADMIN_TOKEN
 });
 var base = Airtable.base('appOAKLyHFLsa7jpK');
 
