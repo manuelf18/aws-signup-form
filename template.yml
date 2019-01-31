@@ -84,33 +84,32 @@ Parameters:
       name. (e.g if you name your app super-app, the bucket is gonna be named
       super-app-bucket).
     AllowedPattern: '^[a-z0-9-_]*$'
-  GITHUB_API_KEY:
+  GITHUBAPIKEY:
     Type: String
     Description: This is your API key as an admin for a GitHub group.
-  GITHUB_TEAM_URL:
+  GITHUBTEAMURL:
     Type: String
     Description: This is the url of the GitHub group.
-    AllowerPattern: ^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$
-  AIRTABLE_ADMIN_TOKEN:
+    AllowedPattern: >-
+      ^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$
+  AIRTABLEADMINTOKEN:
     Type: String
     Description: This is your API key as an admin for an Airtable Table.
-  AIRTABLE_BASE_ID:
+  AIRTABLEBASEID:
     Type: String
     Description: This is the id of your AirTable base.
-  AIRTABLE_BASE_TABLE_NAME:
+  AIRTABLEBASETABLENAME:
     Type: String
     Description: This is the name of the table inside your AirTable base.
-  MAILCHIMP_API_KEY:
+  MAILCHIMPAPIKEY:
     Type: String
-    Description:  This is your API key as an admin for a MailChimp List.
-  MAILCHIMP_DC:
+    Description: This is your API key as an admin for a MailChimp List.
+  MAILCHIMPDC:
     Type: String
     Description: This is the dc of your MailChimp profile
-  MAILCHIMP_LIST_ID:
+  MAILCHIMPLISTID:
     Type: String
     Description: This is the id of your MailChimp list.
-  
-  
 Resources:
   s3bucket:
     Type: 'AWS::S3::Bucket'
@@ -179,15 +178,16 @@ Resources:
         - iamrole
         - Arn
       Runtime: nodejs8.10
-      Enviroment:
-        GITHUB_ACCESS_TOKEN: !Ref GITHUB_API_KEY
-        GITHUB_TEAM_URL: !Ref GITHUB_TEAM_URL
-        AIRTABLE_ADMIN_TOKEN: !Ref AIRTABLE_ADMIN_TOKEN
-        AIRTABLE_BASE: !Ref AIRTABLE_BASE_ID
-        AIRTABLE_BASE_TABLE: !Ref AIRTABLE_BASE_TABLE_NAME
-        MAILCHIMP_ADMIN_TOKEN: !Ref MAILCHIMP_API_KEY
-        MAILCHIMP_DC: !Ref MAILCHIMP_DC
-        MAILCHIMP_LIST_ID: !Ref MAILCHIMP_LIST_ID
+      Environment:
+        Variables:
+          AIRTABLE_ADMIN_TOKEN: !Ref AIRTABLEADMINTOKEN
+          AIRTABLE_BASE: !Ref AIRTABLEBASEID
+          AIRTABLE_BASE_TABLE: !Ref AIRTABLEBASETABLENAME
+          GITHUB_ACCESS_TOKEN: !Ref GITHUBAPIKEY
+          GITHUB_TEAM_URL: !Ref GITHUBTEAMURL
+          MAILCHIMP_ADMIN_TOKEN: !Ref MAILCHIMPAPIKEY
+          MAILCHIMP_DC: !Ref MAILCHIMPDC
+          MAILCHIMP_LIST_ID: !Ref MAILCHIMPLISTID
     Metadata:
       'AWS::CloudFormation::Designer':
         id: 35e070e2-6ab8-4b16-92e1-dd9b31e92517
