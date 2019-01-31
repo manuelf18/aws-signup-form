@@ -1,20 +1,15 @@
 const axios = require('axios');
+
 var Airtable = require('airtable');
 Airtable.configure({
     endpointUrl: 'https://api.airtable.com',
     apiKey: process.env.AIRTABLE_ADMIN_TOKEN
 });
-var base = Airtable.base('appOAKLyHFLsa7jpK');
+var base = Airtable.base(process.env.AIRTABLE_BASE);
 
 const GITHUB = {
-    group: "BalboaDevelopers",
-    admin_token: process.env.GITHUB_ADMIN_TOKEN,
-    team_id: "3088701",
-    repo: {
-        owner: "BalboaDevelopers",
-        name: "encuEsTHas"
-    }
-}
+    access_token : process.env.GITHUB_ACCESS_TOKEN 
+};
 
 const MAILCHIMP = {
     dc: "us20", // this is the datacenter of the list
@@ -22,14 +17,28 @@ const MAILCHIMP = {
     api_key: process.env.MAILCHIMP_ADMIN_TOKEN
 }
 
-async function addGithub(username){
-    const url = {
-        team: `https://api.github.com/teams/${GITHUB.team_id}/memberships/${username}?access_token=${GITHUB.admin_token}`,
-        repo: `https://api.github.com/teams/${GITHUB.team_id}/repos/${GITHUB.repo.owner}/${GITHUB.repo.name}?access_token=${GITHUB.admin_token}`
-    };
+async function getTeamIdFromUrl(){
+    const coincidences = ['/orgs/', '/teams/']
+    const teamUrl = process.env.GITHUB_TEAM_URL
+    let index = teamUrl.indexOf(coincidences[0], 4) + coincidences[0].length;
+    const org = teamUrl.substring(index, teamUrl.indexOf('/', index));
+    index = index + org.length + coincidences[1].length;
+    const team = teamUrl.substring(index);
     try{
-        const resTeam = await axios.put(url.team);
-        await axios.put(url.repo);
+        const rest = await axios.get(`https://api.github.com/orgs/${org}/teams?access_token=${GITHUB.access_token}`);
+        const resp = rest.data.find(v => v.slug === team);
+        return resp.id;
+    }
+    catch(e){
+        throw new Error(e);
+    }
+}
+
+async function addGithub(username){
+    let teamId = await getTeamIdFromUrl();
+    const url = `https://api.github.com/teams/${teamId}/memberships/${username}?access_token=${GITHUB.access_token}`;
+    try{
+        const resTeam = await axios.put(url);
         return resTeam;
     }
     catch(e){
@@ -68,7 +77,7 @@ async function addAirTable(fullname, email, username){
         "Github Username": `@${username}`
     }
     try{
-        const res = await base('People').create(data);
+        const res = await base(process.env.AIRTABLE_BASE_TABLE).create(data);
         return res;
     }
     catch(e){
@@ -94,7 +103,7 @@ exports.handler = async (event) => {
     catch(e){
         const response = {
             statusCode: 500,
-            body: JSON.stringify(e),
+            body: "There was an internal server error.",
         };
         return response;   
     }

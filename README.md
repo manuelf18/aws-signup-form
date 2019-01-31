@@ -9,54 +9,21 @@ This repository contains a form built with [Create React App](https://github.com
 * [NPM](https://www.npmjs.com/).
 * Unix like OS (Tested on Mac OS X).
 
-## TODO:
-Generate a way to keep the uniques name for clashing. These names are defined in template.json, they are the names of the S3 bucket, lambda function and apigateway.
-You'll have to change the names in template.json
+## Testing using the AWS CloudFormation web app
+Before proceeding to use the Cloudformation App you'll need a couple of variables
+1. A name for the resulting aplication.
+2. The GitHub Admin Access Key
+3. The GitHub Group (in which you want the new members to be inserted) Url
 
-## Install dependencies
-You can enter both folders and use:
-``` 
-npm install 
-```
-or use the shell utility in this repo:
-```
-bash build.sh
-```
+4. The Airtable Admin Token.
+5. The Airtable Base Id.
+6. The Airtable Base Table Name.
 
-## Testing the React form locally
-You can test the react form on your local machine by using either:
-``` 
-npm start 
-```
-or:
-``` 
-yarn start 
-```
+6. The MailChimp API key.
+7. The Mailchimp DataCenter.
+8. The Mailchimp List ID.
 
-## Testing Self Upload
-You'll need to upload the React form to a S3 Bucket. You can do this by entering to /react-form
-and using the build script
-```
-npm run build
-```
-and uploading everything in the new build/ folder to the S3 bucket.
-
-To build and deploy at the same time you'll first need to set an enviromental variable named S3BUCKET, then you can execute:
-```
-npm run deploy
-```
-which will build the react form and then upload it to wherever the enviromental variable points.
-
-The lambda function can be uploaded with 
-```
-npm run upload
-```
-
-## Testing CloudFormation
-To test cloudformation youll need to set up your AWS cli with an IAM account with admin privileges.
-then remember to change the names in uppercase letters in template.json
-then just 
-``` 
-bash deploy.sh
-```
-
+Follow these guides to access each service variables:
+1. [GitHub](docs/github.md)
+2. [MailChimp](docs/mailchimp.md) 
+3. [airtable](docs/airtable.md)
