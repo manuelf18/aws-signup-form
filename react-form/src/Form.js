@@ -39,9 +39,11 @@ class CustomForm extends Component {
                 // Lambda Response
                 console.log('Response from lambda: ');
                 console.log(lambdaResponse);
+                alert('Success in POST');
             } catch(e) {
                 // statements
                 console.log(e);
+                alert('Fail in POST');
             }
         }
     }

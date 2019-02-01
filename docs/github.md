@@ -5,7 +5,7 @@
 2. Enter https://github.com/settings/tokens
 3. Here generate a new token: 
 ![First Image][0]
-4. Check everything you need (I checked everything), and then "Generate token": 
+4. Name the token, check the admin:org permission, and then "Generate token": 
 ![Second Image][1]
 5. Copy your new token:<br>
 ![Third Image][2]

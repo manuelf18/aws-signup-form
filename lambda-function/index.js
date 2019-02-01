@@ -1,11 +1,11 @@
 const axios = require('axios');
-
+const AIRTABLE_VARS = getAirtableVariablesFromUrl();
 var Airtable = require('airtable');
 Airtable.configure({
     endpointUrl: 'https://api.airtable.com',
-    apiKey: process.env.AIRTABLE_ADMIN_TOKEN
+    apiKey: AIRTABLE_VARS.AIRTABLE_ADMIN_TOKEN
 });
-var base = Airtable.base(process.env.AIRTABLE_BASE);
+var base = Airtable.base(AIRTABLE_VARS.AIRTABLE_BASE);
 
 const GITHUB = {
     access_token : process.env.GITHUB_ACCESS_TOKEN 
@@ -32,6 +32,18 @@ async function getTeamIdFromUrl(){
     catch(e){
         throw new Error(e);
     }
+}
+
+function getAirtableVariablesFromUrl(){
+    const url = process.env.AIRTABLE_URL; // https://api.airtable.com/v0/appOAKLyHFLsa7jpK/People?api_key=keynZnVBcfVOPH6Xm
+    const coincidence = '/v0/';
+    let ans = {};
+    let index = url.indexOf(coincidence) + coincidence.length;
+    ans.AIRTABLE_BASE = url.substring(index, url.indexOf('/', index));
+    index = url.indexOf('/', index);
+    ans.AIRTABLE_BASE_TABLE = url.substring(index, url.indexOf('?', index));
+    ans.AIRTABLE_ADMIN_TOKEN = url.substring(url.indexOf('api_key=', index));
+    return ans;
 }
 
 async function addGithub(username){
@@ -77,7 +89,7 @@ async function addAirTable(fullname, email, username){
         "Github Username": `@${username}`
     }
     try{
-        const res = await base(process.env.AIRTABLE_BASE_TABLE).create(data);
+        const res = await base(AIRTABLE_VARS.AIRTABLE_BASE_TABLE).create(data);
         return res;
     }
     catch(e){

@@ -77,13 +77,6 @@ Metadata:
       z: 0
       embeds: []
 Parameters:
-  AppNameParameter:
-    Type: String
-    Description: >-
-      This is the name of the app, all the resources will be named after this
-      name. (e.g if you name your app super-app, the bucket is gonna be named
-      super-app-bucket).
-    AllowedPattern: '^[a-z0-9-_]*$'
   GITHUBAPIKEY:
     Type: String
     Description: This is your API key as an admin for a GitHub group.
@@ -92,15 +85,9 @@ Parameters:
     Description: This is the url of the GitHub group.
     AllowedPattern: >-
       ^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$
-  AIRTABLEADMINTOKEN:
+  AIRTABLEURL:
     Type: String
-    Description: This is your API key as an admin for an Airtable Table.
-  AIRTABLEBASEID:
-    Type: String
-    Description: This is the id of your AirTable base.
-  AIRTABLEBASETABLENAME:
-    Type: String
-    Description: This is the name of the table inside your AirTable base.
+    Description: This is the Airtable url with the API key.
   MAILCHIMPAPIKEY:
     Type: String
     Description: This is your API key as an admin for a MailChimp List.
@@ -117,7 +104,7 @@ Resources:
       AccessControl: PublicRead
       BucketName: !Join 
         - ''
-        - - !Ref AppNameParameter
+        - - !Ref AWS::StackName
           - '-bucket'
       WebsiteConfiguration:
         IndexDocument: index.html
@@ -157,7 +144,7 @@ Resources:
       Description: API Gateway for Lambda
       Name: !Join 
         - ''
-        - - !Ref AppNameParameter
+        - - !Ref AWS::StackName
           - '-apigateway'
     Metadata:
       'AWS::CloudFormation::Designer':
@@ -171,7 +158,7 @@ Resources:
       Description: 'Lambda function that consumes MailChimp, Github Airtable'
       FunctionName: !Join 
         - ''
-        - - !Ref AppNameParameter
+        - - !Ref AWS::StackName
           - '-lambda'
       Handler: index.handler
       Role: !GetAtt 
@@ -180,9 +167,7 @@ Resources:
       Runtime: nodejs8.10
       Environment:
         Variables:
-          AIRTABLE_ADMIN_TOKEN: !Ref AIRTABLEADMINTOKEN
-          AIRTABLE_BASE: !Ref AIRTABLEBASEID
-          AIRTABLE_BASE_TABLE: !Ref AIRTABLEBASETABLENAME
+          AIRTABLE_URL: !Ref AIRTABLEURL
           GITHUB_ACCESS_TOKEN: !Ref GITHUBAPIKEY
           GITHUB_TEAM_URL: !Ref GITHUBTEAMURL
           MAILCHIMP_ADMIN_TOKEN: !Ref MAILCHIMPAPIKEY
