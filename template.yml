@@ -25,13 +25,16 @@ Metadata:
         - fef35747-14d8-41d6-b3d5-c5fdd8f7cdbd
     83abc666-7f64-4024-8b5f-e65ed065f457:
       size:
-        width: 90
-        height: 90
+        width: 270
+        height: 270
       position:
-        x: 60
-        'y': 90
+        x: -20
+        'y': 80
       z: 1
-      embeds: []
+      embeds:
+        - 8160655f-bb99-4486-8d14-50c378eff1d4
+        - f3fecff9-bf64-4a9e-bcf0-c1d8397ded4a
+        - 3b01c77b-58eb-45f7-b067-60f5214053dd
     35e070e2-6ab8-4b16-92e1-dd9b31e92517:
       size:
         width: 60
@@ -41,16 +44,15 @@ Metadata:
         'y': 270
       z: 1
       embeds: []
-      dependson:
-        - b2b36c49-1ec1-4ce8-ae47-e9f59d29f0ad
     f3fecff9-bf64-4a9e-bcf0-c1d8397ded4a:
       size:
         width: 60
         height: 60
       position:
-        x: -40
-        'y': 240
-      z: 0
+        x: 0
+        'y': 210
+      z: 2
+      parent: 83abc666-7f64-4024-8b5f-e65ed065f457
       embeds: []
       iscontainedinside:
         - 83abc666-7f64-4024-8b5f-e65ed065f457
@@ -59,9 +61,10 @@ Metadata:
         width: 60
         height: 60
       position:
-        x: -150
-        'y': 120
-      z: 0
+        x: 120
+        'y': 130
+      z: 2
+      parent: 83abc666-7f64-4024-8b5f-e65ed065f457
       embeds: []
       iscontainedinside:
         - 83abc666-7f64-4024-8b5f-e65ed065f457
@@ -72,10 +75,22 @@ Metadata:
         width: 60
         height: 60
       position:
-        x: 230
+        x: 240
         'y': 180
-      z: 0
+      z: 1
       embeds: []
+    8160655f-bb99-4486-8d14-50c378eff1d4:
+      size:
+        width: 60
+        height: 60
+      position:
+        x: 10
+        'y': 140
+      z: 2
+      parent: 83abc666-7f64-4024-8b5f-e65ed065f457
+      embeds: []
+      iscontainedinside:
+        - 83abc666-7f64-4024-8b5f-e65ed065f457
 Parameters:
   GITHUBAPIKEY:
     Type: String
@@ -101,7 +116,7 @@ Resources:
       AccessControl: PublicRead
       BucketName: !Join 
         - ''
-        - - !Ref AWS::StackName
+        - - !Ref 'AWS::StackName'
           - '-bucket'
       WebsiteConfiguration:
         IndexDocument: index.html
@@ -141,7 +156,7 @@ Resources:
       Description: API Gateway for Lambda
       Name: !Join 
         - ''
-        - - !Ref AWS::StackName
+        - - !Ref 'AWS::StackName'
           - '-apigateway'
     Metadata:
       'AWS::CloudFormation::Designer':
@@ -155,7 +170,7 @@ Resources:
       Description: 'Lambda function that consumes MailChimp, Github Airtable'
       FunctionName: !Join 
         - ''
-        - - !Ref AWS::StackName
+        - - !Ref 'AWS::StackName'
           - '-lambda'
       Handler: index.handler
       Role: !GetAtt 
@@ -174,7 +189,7 @@ Resources:
         id: 35e070e2-6ab8-4b16-92e1-dd9b31e92517
     DependsOn:
       - iamrole
-  apimethod:
+  apimethodpost:
     Type: 'AWS::ApiGateway::Method'
     Properties:
       AuthorizationType: NONE
@@ -182,6 +197,9 @@ Resources:
       Integration:
         Type: AWS
         IntegrationHttpMethod: POST
+        Credentials: !GetAtt 
+          - iamrole
+          - Arn
         Uri: !Join 
           - ''
           - - 'arn:aws:apigateway:'
@@ -193,19 +211,59 @@ Resources:
             - /invocations
         IntegrationResponses:
           - StatusCode: 200
-      RequestParameters:
-        method.request.querystring.name: false
+            ResponseParameters:
+              method.response.header.Access-Control-Allow-Origin: '''*'''
       ResourceId: !GetAtt 
         - apigateway
         - RootResourceId
       RestApiId: !Ref apigateway
       MethodResponses:
         - StatusCode: 200
+          ResponseModels:
+            application/json: Empty
+          ResponseParameters:
+            method.response.header.Access-Control-Allow-Origin: true
     Metadata:
       'AWS::CloudFormation::Designer':
         id: f3fecff9-bf64-4a9e-bcf0-c1d8397ded4a
+  apimethodoptions:
+    Type: 'AWS::ApiGateway::Method'
+    Properties:
+      AuthorizationType: NONE
+      RestApiId: !Ref apigateway
+      ResourceId: !GetAtt 
+        - apigateway
+        - RootResourceId
+      HttpMethod: OPTIONS
+      Integration:
+        IntegrationResponses:
+          - StatusCode: 200
+            ResponseParameters:
+              method.response.header.Access-Control-Allow-Headers: >-
+                'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'
+              method.response.header.Access-Control-Allow-Methods: '''POST,OPTIONS'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+            ResponseTemplates:
+              application/json: ''
+        PassthroughBehavior: WHEN_NO_MATCH
+        RequestTemplates:
+          application/json: '{"statusCode": 200}'
+        Type: MOCK
+      MethodResponses:
+        - StatusCode: 200
+          ResponseModels:
+            application/json: Empty
+          ResponseParameters:
+            method.response.header.Access-Control-Allow-Headers: true
+            method.response.header.Access-Control-Allow-Methods: true
+            method.response.header.Access-Control-Allow-Origin: true
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: 8160655f-bb99-4486-8d14-50c378eff1d4
   apideploy:
-    DependsOn: apimethod
+    DependsOn:
+      - apimethodpost
+      - apimethodoptions
     Type: 'AWS::ApiGateway::Deployment'
     Properties:
       RestApiId: !Ref apigateway
@@ -224,9 +282,18 @@ Resources:
             Principal:
               Service:
                 - lambda.amazonaws.com
+                - apigateway.amazonaws.com
             Action:
               - 'sts:AssumeRole'
       Path: /
+      Policies:
+        - PolicyName: root
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action: '*'
+                Resource: '*'
     Metadata:
       'AWS::CloudFormation::Designer':
         id: b2b36c49-1ec1-4ce8-ae47-e9f59d29f0ad
