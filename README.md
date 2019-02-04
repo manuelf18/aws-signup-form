@@ -21,6 +21,5 @@ We provide a small list where you can map the variabes you are getting with the 
 --- [Guide for Airtable](docs/airtable.md) ---<br>
 
 4. The MailChimp API key.
-5. The Mailchimp DataCenter.
-6. The Mailchimp List ID. <br>
+5. The Mailchimp List ID. <br>
 --- [Guide for MailChimp variables](docs/mailchimp.md) ---<br>

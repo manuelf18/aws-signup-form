@@ -12,8 +12,8 @@ const GITHUB = {
 };
 
 const MAILCHIMP = {
-    dc: "us20", // this is the datacenter of the list
-    list_id: "69cbc0fea0",
+    dc: process.env.MAILCHIMP_LIST_ID.slice(-4), // this is the datacenter of the list
+    list_id: process.env.MAILCHIMP_LIST_ID,
     api_key: process.env.MAILCHIMP_ADMIN_TOKEN
 }
 
@@ -35,7 +35,7 @@ async function getTeamIdFromUrl(){
 }
 
 function getAirtableVariablesFromUrl(){
-    const url = process.env.AIRTABLE_URL; // https://api.airtable.com/v0/appOAKLyHFLsa7jpK/People?api_key=keynZnVBcfVOPH6Xm
+    const url = process.env.AIRTABLE_URL;
     const coincidence = '/v0/';
     let ans = {};
     let index = url.indexOf(coincidence) + coincidence.length;

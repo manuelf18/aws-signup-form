@@ -14,13 +14,6 @@
 [1]: images/mailchimp1.png "Image 2"
 [2]: images/mailchimp2.png "Image 3"
 
-## Getting the MailChimp Data Center
-1. The mailchimp data center is the first part of the url you are accessing to:
-for example you can see in image one that my data center is: us-20 <br>
-![Seventh Image][6]
-
-[6]: images/mailchimp6.png "Image 7"
-
 ## Getting the MailChimp List Id
 1. Enter to the lists tab.
 2. Enter to the list in which you want to include users: <br>

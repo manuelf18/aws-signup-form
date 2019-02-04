@@ -91,9 +91,6 @@ Parameters:
   MAILCHIMPAPIKEY:
     Type: String
     Description: This is your API key as an admin for a MailChimp List.
-  MAILCHIMPDC:
-    Type: String
-    Description: This is the dc of your MailChimp profile
   MAILCHIMPLISTID:
     Type: String
     Description: This is the id of your MailChimp list.
@@ -171,7 +168,6 @@ Resources:
           GITHUB_ACCESS_TOKEN: !Ref GITHUBAPIKEY
           GITHUB_TEAM_URL: !Ref GITHUBTEAMURL
           MAILCHIMP_ADMIN_TOKEN: !Ref MAILCHIMPAPIKEY
-          MAILCHIMP_DC: !Ref MAILCHIMPDC
           MAILCHIMP_LIST_ID: !Ref MAILCHIMPLISTID
     Metadata:
       'AWS::CloudFormation::Designer':
