@@ -12,7 +12,7 @@ const GITHUB = {
 };
 
 const MAILCHIMP = {
-    dc: process.env.MAILCHIMP_LIST_ID.slice(-4), // this is the datacenter of the list
+    dc: process.env.MAILCHIMP_ADMIN_TOKEN.slice(-4), // this is the datacenter of the list
     list_id: process.env.MAILCHIMP_LIST_ID,
     api_key: process.env.MAILCHIMP_ADMIN_TOKEN
 }
@@ -40,9 +40,10 @@ function getAirtableVariablesFromUrl(){
     let ans = {};
     let index = url.indexOf(coincidence) + coincidence.length;
     ans.AIRTABLE_BASE = url.substring(index, url.indexOf('/', index));
-    index = url.indexOf('/', index);
+    index = url.indexOf('/', index) + 1;
     ans.AIRTABLE_BASE_TABLE = url.substring(index, url.indexOf('?', index));
-    ans.AIRTABLE_ADMIN_TOKEN = url.substring(url.indexOf('api_key=', index));
+    index = url.indexOf('api_key=', index) + 'api_key='.length;
+    ans.AIRTABLE_ADMIN_TOKEN = url.substring(index);
     return ans;
 }
 
@@ -82,6 +83,7 @@ async function addMailChimp(email, fullname){
 }
 
 async function addAirTable(fullname, email, username){
+    console.log(AIRTABLE_VARS);
     const data = {
         "Name": fullname,
         "Email": email,
@@ -100,11 +102,8 @@ async function addAirTable(fullname, email, username){
 
 exports.handler = async (event) => {
     const {fullname, email, username} = event;
-    let ans = [];
     try{
-        ans.push(await addGithub(username));
-        ans.push(await addMailChimp(email, fullname));
-        ans.push(await addAirTable(fullname, email, username));
+        let ans = [await addGithub(username), await addMailChimp(email, username), await addAirTable(fullname, email, username)];
         console.log(ans);
         const response = {
             statusCode: 200,
@@ -113,6 +112,7 @@ exports.handler = async (event) => {
         return response;
     }
     catch(e){
+        console.log(e);
         const response = {
             statusCode: 500,
             body: "There was an internal server error.",
