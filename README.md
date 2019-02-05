@@ -19,11 +19,11 @@ Following the above guide we will obtain:
 2. The GitHub Group (in which you want the new members to be inserted) Url <br>
 
 --- [Guide for Airtable](docs/airtable.md) ---<br>
-Following the above guide we will obtain:
+Following the above guide we will obtain:<br>
 3. The Airtable API Url. <br>
 
 --- [Guide for MailChimp variables](docs/mailchimp.md) ---<br>
-Following the above guide we will obtain:
+Following the above guide we will obtain:<br>
 4. The MailChimp API key.
 5. The Mailchimp List ID. <br>
 
