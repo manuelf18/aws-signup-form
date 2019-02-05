@@ -13,13 +13,17 @@ This repository contains a form built with [Create React App](https://github.com
 Before proceeding to use the Cloudformation App you'll need a couple of variables.
 We provide a small list where you can map the variabes you are getting with the number of variables below.
 
+--- [Guide for GitHub variables](docs/github.md) ---<br>
+Following the above guide we will obtain:
 1. The GitHub Admin Access Key
 2. The GitHub Group (in which you want the new members to be inserted) Url <br>
---- [Guide for GitHub variables](docs/github.md) ---<br>
 
-3. The Airtable API Url. <br>
 --- [Guide for Airtable](docs/airtable.md) ---<br>
+Following the above guide we will obtain:
+3. The Airtable API Url. <br>
 
+--- [Guide for MailChimp variables](docs/mailchimp.md) ---<br>
+Following the above guide we will obtain:
 4. The MailChimp API key.
 5. The Mailchimp List ID. <br>
---- [Guide for MailChimp variables](docs/mailchimp.md) ---<br>
+
