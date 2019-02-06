@@ -14,13 +14,14 @@ Before proceeding to use the Cloudformation App you'll need a couple of variable
 We provide a small list where you can map the variabes you are getting with the number of variables below.
 
 --- [Guide for GitHub variables](docs/github.md) ---<br>
-Following the above guide we will obtain:
-1. The GitHub Admin Access Key
-2. The GitHub Group (in which you want the new members to be inserted) Url <br>
-
---- [Guide for Airtable](docs/airtable.md) ---<br>
 Following the above guide we will obtain:<br>
-3. The Airtable API Url. <br>
+1. The GitHub Admin Access Key.
+2. The GitHub Group (in which you want the new members to be inserted) Url.
+
+--- [Guide for Airtable](docs/airtable.md) ---
+
+Following the above guide we will obtain:<br>
+3. The Airtable API Url.
 
 --- [Guide for MailChimp variables](docs/mailchimp.md) ---<br>
 Following the above guide we will obtain:<br>

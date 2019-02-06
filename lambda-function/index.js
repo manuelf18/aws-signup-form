@@ -30,6 +30,7 @@ async function getTeamIdFromUrl(){
         return resp.id;
     }
     catch(e){
+        console.log(e);
         throw new Error(e);
     }
 }
@@ -48,22 +49,23 @@ function getAirtableVariablesFromUrl(){
 }
 
 async function addGithub(username){
-    let teamId = await getTeamIdFromUrl();
-    const url = `https://api.github.com/teams/${teamId}/memberships/${username}?access_token=${GITHUB.access_token}`;
     try{
+        let teamId = await getTeamIdFromUrl();
+        const url = `https://api.github.com/teams/${teamId}/memberships/${username}?access_token=${GITHUB.access_token}`;
         const resTeam = await axios.put(url);
         return resTeam;
     }
     catch(e){
+        console.log(e);
         throw new Error(e);
-    } 
+    }
+
 }
 
 async function addMailChimp(email, fullname){
     const index = fullname.indexOf(' ');
     const fname = fullname.substr(0, index);
     const lname = fullname.substr(index + 1);
-    axios.defaults.headers.common['Authorization'] = `Bearer ${MAILCHIMP.api_key}`;
     const data = {
         email_address: email,
         status: "pending",
@@ -74,7 +76,7 @@ async function addMailChimp(email, fullname){
     }
     const url = `https://${MAILCHIMP.dc}.api.mailchimp.com/3.0/lists/${MAILCHIMP.list_id}/members/`;
     try{
-        const res = await axios.post(url, data);
+        const res = await axios.post(url, data, {headers:{'Authorization':`bearer ${MAILCHIMP.api_key}`}});
         return res;
     }
     catch(e){
@@ -102,21 +104,33 @@ async function addAirTable(fullname, email, username){
 
 exports.handler = async (event) => {
     const {fullname, email, username} = event;
+    const response = {
+        statusCode: 200,
+        body: [],
+    };
     try{
-        let ans = [await addGithub(username), await addMailChimp(email, username), await addAirTable(fullname, email, username)];
-        console.log(ans);
-        const response = {
-            statusCode: 200,
-            body: JSON.stringify(`Exito`),
-        };
-        return response;
+        await addGithub(username);
+        response.body.push('Success on GitHub');
     }
     catch(e){
         console.log(e);
-        const response = {
-            statusCode: 500,
-            body: "There was an internal server error.",
-        };
-        return response;   
+        response.body.push('There was an error on GitHub');
     }
+    try{
+        await addMailChimp(email, username);
+        response.body.push('Success on MailChimp');
+    }
+    catch(e){
+        console.log(e);
+        response.body.push('Error on MailChimp');
+    }
+    try{
+        await addAirTable(fullname, email, username);
+        response.body.push('Success on AirTable');
+    }
+    catch(e){
+        console.log(e);
+        response.body.push('Error on AirTable');
+    }
+    return response;
 }; 
